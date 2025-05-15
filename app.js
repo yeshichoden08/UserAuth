@@ -5,10 +5,8 @@ const session = require('express-session');
 require('dotenv').config();
 const { createUserTable } = require('./Models/userModels');
 
-
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
@@ -21,24 +19,16 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
 // Routes
-// const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
-// const userRoutes = require('./routes/userRoutes');
 app.use('/', authRoutes);
-// app.use('/', adminRoutes);
-// app.use('/', userRoutes);
 
-
-// Schema creation
-createUserTable(); // Call this after setting up middlewares
-
+// Database Schema
+createUserTable();
 
 // Server
 app.listen(PORT, () => {
