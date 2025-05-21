@@ -3,7 +3,15 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 require('dotenv').config();
+
+// Import DB setup functions
 const { createUserTable } = require('./Models/userModels');
+const { createFoodTable } = require('./Models/foodModel');
+
+// Import Routes (before using them!)
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,11 +32,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Routes
-const authRoutes = require('./routes/authRoutes');
 app.use('/', authRoutes);
+app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 
-// Database Schema
+// Database Schema Initialization
 createUserTable();
+createFoodTable();
 
 // Server
 app.listen(PORT, () => {
